@@ -119,7 +119,7 @@ async function evaluateNavigation(details) {
     };
     source = "blocklist";
   } else {
-    verdict = analyzeURL(url);
+    verdict = analyzeURL(url, { enableLookalikeDetection: state.settings.lookalikeDetectionEnabled });
   }
 
   if (!verdict.suspicious) return;
@@ -184,7 +184,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         return;
       }
 
-      sendResponse({ ok: true, verdict: analyzeURL(message.url) });
+      sendResponse({ ok: true, verdict: analyzeURL(message.url, { enableLookalikeDetection: state.settings.lookalikeDetectionEnabled }) });
       return;
     }
 

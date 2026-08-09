@@ -3,7 +3,8 @@
 const DEFAULT_SETTINGS = {
   protectionEnabled: true,
   searchScanningEnabled: true,
-  showLowRiskSearchWarnings: false
+  showLowRiskSearchWarnings: false,
+  lookalikeDetectionEnabled: true
 };
 
 async function load() {
@@ -13,6 +14,7 @@ async function load() {
 
   protection.checked = settings.protectionEnabled;
   document.getElementById("search-scanning").checked = settings.searchScanningEnabled;
+  document.getElementById("lookalike-detection").checked = settings.lookalikeDetectionEnabled;
   document.getElementById("blocked-count").textContent = stats.blockedCount;
   document.getElementById("warned-count").textContent = stats.warnedSearchLinks;
 
@@ -39,3 +41,7 @@ document.getElementById("search-scanning").addEventListener("change", event =>
 document.getElementById("options").addEventListener("click", () => chrome.runtime.openOptionsPage());
 
 load();
+
+document.getElementById("lookalike-detection").addEventListener("change", event =>
+  updateSetting("lookalikeDetectionEnabled", event.target.checked)
+);

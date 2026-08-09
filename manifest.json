@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Guardian Security",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Proactively flags suspicious URLs and warns before potentially dangerous websites are opened.",
   "minimum_chrome_version": "120",
   "permissions": [
@@ -33,6 +33,7 @@
       ],
       "js": [
         "lib/analyzer.js",
+        "lib/search-utils.js",
         "content.js"
       ],
       "css": [

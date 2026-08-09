@@ -1,26 +1,52 @@
-# Validation Report — v1.0.1
+# Validation Report — v1.1.0
 
-- PASS — syntax: background.js
-- PASS — syntax: content.js
-- PASS — syntax: lib/analyzer.js
-- PASS — syntax: lib/defaults.js
-- PASS — syntax: blocked.js
-- PASS — syntax: popup.js
-- PASS — syntax: options.js
-- PASS — syntax: tests/analyzer.test.js
-- PASS — regression tests
-- PASS — manifest version 1.0.1
+- PASS — Manifest V3
+- PASS — Version is 1.1.0
+- PASS — Syntax: background.js
+- PASS — Syntax: content.js
+- PASS — Syntax: blocked.js
+- PASS — Syntax: popup.js
+- PASS — Syntax: options.js
+- PASS — Syntax: lib/analyzer.js
+- PASS — Syntax: lib/defaults.js
+- PASS — Syntax: lib/search-utils.js
+- PASS — Syntax: tests/analyzer.test.js
+- PASS — Syntax: tests/search-utils.test.js
+- PASS — Tests: tests/analyzer.test.js
+- PASS — Tests: tests/search-utils.test.js
+- PASS — Asset: background.js
+- PASS — Asset: content.css
+- PASS — Asset: content.js
+- PASS — Asset: lib/analyzer.js
+- PASS — Asset: lib/search-utils.js
+- PASS — Asset: options.html
+- PASS — Asset: popup.html
 
-## Regression test output
+## Analyzer tests
 
 ```text
 PASS - Google phishing search is allowed
-PASS - Google security-research search is allowed
 PASS - Direct phishing path is blocked
-PASS - Direct malicious path is blocked
 PASS - Query-only keyword does not trigger blocking
-PASS - Actual URL credentials still add risk
-PASS - Harmless @ in query is not credential risk
+PASS - PayPal lookalike is flagged
+PASS - Legitimate PayPal domain is not flagged as a lookalike
+PASS - Lookalike detection can be disabled
+PASS - Levenshtein helper works
+PASS - Lookalike helper identifies protected brand
 
-All analyzer regression tests passed.
+All analyzer tests passed.
+```
+
+## Search utility tests
+
+```text
+PASS - Recognizes google.com
+PASS - Recognizes regional Google
+PASS - Rejects lookalike Google host
+PASS - Unwraps Google q redirect
+PASS - Unwraps Google url redirect
+PASS - Outbound example.com URL recognized
+PASS - Google URL excluded from outbound URLs
+
+All search-utils tests passed.
 ```

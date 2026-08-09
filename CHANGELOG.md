@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is inspired by Keep a Changelog.
 
+## [1.1.0] - 2026-08-09
+
+### Added
+
+- Local domain-lookalike detection for a small set of high-value domains.
+- A popup toggle to enable or disable lookalike detection.
+- Shared Google search URL extraction helpers.
+- Search-result verdict caching to reduce repeated background analysis.
+- Expanded analyzer and search utility regression tests.
+
+### Improved
+
+- Google result scanning now prioritizes actual result containers and title links.
+- Search-result warning badges expose risk scores through accessible metadata.
+- URL analyzer verdicts now expose machine-readable signal identifiers.
+
 ## [1.0.1] - 2026-08-09
 
 ### Fixed

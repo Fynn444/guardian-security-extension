@@ -14,3 +14,10 @@
   cursor: help !important;
   box-shadow: 0 1px 2px rgba(16, 24, 40, .08) !important;
 }
+
+.guardian-security-warning[data-guardian-risk^="7"],
+.guardian-security-warning[data-guardian-risk^="8"],
+.guardian-security-warning[data-guardian-risk^="9"],
+.guardian-security-warning[data-guardian-risk="100"] {
+  border-width: 2px !important;
+}
