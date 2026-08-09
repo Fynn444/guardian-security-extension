@@ -1,0 +1,60 @@
+name: Guardian Security Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    name: Package extension
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out release
+        uses: actions/checkout@v4
+
+      - name: Read extension version
+        id: version
+        shell: bash
+        run: |
+          VERSION=$(node -p "require('./manifest.json').version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Extension version: $VERSION"
+
+      - name: Verify release version
+        shell: bash
+        run: |
+          EXPECTED="v${{ steps.version.outputs.version }}"
+
+          if [ "${{ github.event.release.tag_name }}" != "$EXPECTED" ]; then
+            echo "Release tag does not match manifest version."
+            echo "Tag:      ${{ github.event.release.tag_name }}"
+            echo "Expected: $EXPECTED"
+            exit 1
+          fi
+
+      - name: Build extension ZIP
+        shell: bash
+        run: |
+          mkdir -p dist
+
+          zip -r "dist/Guardian-Security-v${{ steps.version.outputs.version }}.zip" . \
+            -x ".git/*" \
+               ".github/*" \
+               "dist/*" \
+               "tests/*" \
+               "*.md" \
+               ".gitignore"
+
+      - name: Attach ZIP to GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh release upload \
+            "${{ github.event.release.tag_name }}" \
+            "dist/Guardian-Security-v${{ steps.version.outputs.version }}.zip" \
+            --clobber
