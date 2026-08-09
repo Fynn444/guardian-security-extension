@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -29,7 +30,9 @@ jobs:
         run: |
           node -e "
           const fs = require('fs');
-          const manifest = JSON.parse(fs.readFileSync('manifest.json', 'utf8'));
+          const manifest = JSON.parse(
+            fs.readFileSync('manifest.json', 'utf8')
+          );
 
           if (manifest.manifest_version !== 3) {
             throw new Error('manifest.json must use Manifest V3');
@@ -39,32 +42,56 @@ jobs:
             throw new Error('manifest.json is missing a version');
           }
 
-          console.log('Manifest valid:', manifest.name, manifest.version);
+          console.log(
+            'Manifest valid:',
+            manifest.name,
+            manifest.version
+          );
           "
 
       - name: Check JavaScript syntax
-  shell: bash
-  run: |
-    set -e
+        shell: bash
+        run: |
+          set -e
 
-    echo "Checking JavaScript files..."
+          echo "Checking JavaScript files..."
 
-    while IFS= read -r -d '' file; do
-      echo "Checking $file"
-      node --check "$file"
-    done < <(find . -type f -name "*.js" \
-      -not -path "./.git/*" \
-      -print0)
+          found=0
 
-    echo "All JavaScript files passed syntax validation."
+          while IFS= read -r file; do
+            found=1
+            echo "Checking: $file"
+            node --check "$file"
+          done < <(
+            find . \
+              -type f \
+              -name "*.js" \
+              -not -path "./.git/*"
+          )
 
-      - name: Check for analyzer regression tests
+          if [ "$found" -eq 0 ]; then
+            echo "No JavaScript files were found."
+            exit 1
+          fi
+
+          echo "All JavaScript files passed syntax validation."
+
+      - name: Run analyzer regression tests when available
         shell: bash
         run: |
           if [ -f "tests/analyzer.test.js" ]; then
-            echo "Running analyzer regression tests..."
+            echo "Running tests/analyzer.test.js"
             node tests/analyzer.test.js
+
+          elif [ -f "analyzer.test.js" ]; then
+            echo "Running analyzer.test.js"
+            node analyzer.test.js
+
           else
-            echo "No analyzer regression test suite found yet."
-            echo "Skipping regression tests."
+            echo "Analyzer regression test file is not currently present."
+            echo "Skipping this step for now."
           fi
+
+      - name: CI summary
+        run: |
+          echo "Guardian Security validation completed successfully."
