@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Suspicious website blocked — Guardian Security</title>
+  <link rel="stylesheet" href="blocked.css">
+</head>
+<body>
+  <main class="shell">
+    <section class="card" aria-labelledby="page-title">
+      <div class="shield" aria-hidden="true">!</div>
+      <p class="eyebrow">GUARDIAN SECURITY</p>
+      <h1 id="page-title">Suspicious website blocked</h1>
+      <p class="lead">Warning: This website was blocked by your Security Extension because it looks suspicious.</p>
+
+      <div class="risk-row">
+        <div>
+          <span class="muted">Risk score</span>
+          <strong id="risk-score">—</strong>
+        </div>
+        <div>
+          <span class="muted">Assessment</span>
+          <strong id="severity">Suspicious</strong>
+        </div>
+      </div>
+
+      <section class="details">
+        <p class="label">Blocked destination</p>
+        <p id="blocked-url" class="url">Unknown</p>
+        <p class="label reasons-label">Why it was flagged</p>
+        <ul id="reasons"></ul>
+      </section>
+
+      <div class="actions">
+        <button id="back" class="primary" type="button">Go back to safety</button>
+        <button id="proceed" class="danger" type="button">Proceed once</button>
+      </div>
+
+      <details>
+        <summary>Trust this domain?</summary>
+        <p>Only allowlist a domain when you are certain it is legitimate. This disables Guardian warnings for that domain and its subdomains.</p>
+        <button id="allowlist" class="secondary" type="button">Add domain to allowlist</button>
+      </details>
+
+      <p class="footnote">Detection is heuristic and can make mistakes. Guardian does not upload your URLs in this local-only build.</p>
+    </section>
+  </main>
+  <script src="blocked.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Guardian Security</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main>
+    <header>
+      <div class="logo">G</div>
+      <div><strong>Guardian Security</strong><span>Local URL protection</span></div>
+    </header>
+
+    <section id="status" class="status good">
+      <span class="dot"></span>
+      <div><strong id="status-title">Protection active</strong><span id="status-copy">Navigation checks are enabled.</span></div>
+    </section>
+
+    <label class="toggle-row">
+      <span><strong>Navigation protection</strong><small>Warn before suspicious sites open</small></span>
+      <input id="protection" type="checkbox">
+    </label>
+
+    <label class="toggle-row">
+      <span><strong>Google result scanning</strong><small>Mark suspicious outbound links</small></span>
+      <input id="search-scanning" type="checkbox">
+    </label>
+
+    <section class="stats">
+      <div><strong id="blocked-count">0</strong><span>blocked</span></div>
+      <div><strong id="warned-count">0</strong><span>search warnings</span></div>
+    </section>
+
+    <button id="options" type="button">Manage lists & settings</button>
+    <p class="privacy">This build analyzes URLs locally.</p>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

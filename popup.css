@@ -1,0 +1,24 @@
+:root { font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; color: #172033; }
+* { box-sizing: border-box; }
+body { margin: 0; width: 360px; background: #f8fafc; }
+main { padding: 18px; }
+header { display: flex; align-items: center; gap: 11px; margin-bottom: 16px; }
+.logo { width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; background: #172033; color: white; font-weight: 900; }
+header strong, header span { display: block; }
+header span { color: #64748b; font-size: 12px; margin-top: 2px; }
+.status { display: flex; align-items: center; gap: 10px; border-radius: 14px; padding: 13px; border: 1px solid #dbe4ef; background: white; }
+.status .dot { width: 10px; height: 10px; border-radius: 50%; background: #16a34a; }
+.status.off .dot { background: #dc2626; }
+.status strong, .status span { display: block; }
+.status span { color: #64748b; font-size: 12px; margin-top: 2px; }
+.toggle-row { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 15px 2px; border-bottom: 1px solid #e2e8f0; }
+.toggle-row strong, .toggle-row small { display: block; }
+.toggle-row small { color: #64748b; margin-top: 3px; }
+input[type=checkbox] { width: 18px; height: 18px; }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+.stats div { background: white; border: 1px solid #e2e8f0; padding: 12px; border-radius: 12px; }
+.stats strong, .stats span { display: block; }
+.stats strong { font-size: 22px; }
+.stats span { color: #64748b; font-size: 11px; }
+button { width: 100%; padding: 11px 14px; border-radius: 10px; border: 0; background: #172033; color: white; font: inherit; font-weight: 800; cursor: pointer; }
+.privacy { text-align: center; color: #94a3b8; font-size: 11px; margin: 10px 0 0; }

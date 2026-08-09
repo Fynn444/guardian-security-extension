@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Guardian Security Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">GUARDIAN SECURITY</p>
+      <h1>Protection settings</h1>
+      <p>Manage local trust and block rules. Enter hostnames only, such as <code>example.com</code>.</p>
+    </header>
+
+    <section class="panel">
+      <h2>Allowlist</h2>
+      <p>Guardian will not warn about these domains or their subdomains.</p>
+      <form id="allow-form">
+        <input id="allow-input" placeholder="trusted.example.com" autocomplete="off">
+        <button type="submit">Add</button>
+      </form>
+      <div id="allow-list" class="list"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Blocklist</h2>
+      <p>Top-level requests to these domains are blocked using Manifest V3 declarativeNetRequest rules.</p>
+      <form id="block-form">
+        <input id="block-input" placeholder="bad.example" autocomplete="off">
+        <button type="submit">Block</button>
+      </form>
+      <div id="block-list" class="list"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Data</h2>
+      <p>Reset local counters and temporary decisions without changing your lists.</p>
+      <button id="reset-stats" class="secondary" type="button">Reset statistics</button>
+    </section>
+
+    <p id="message" role="status"></p>
+  </main>
+  <script src="options.js"></script>
+</body>
+</html>

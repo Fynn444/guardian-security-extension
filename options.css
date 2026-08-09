@@ -1,0 +1,19 @@
+:root { font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; color: #172033; background: #f5f7fb; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { width: min(840px, calc(100% - 32px)); margin: 52px auto; }
+header { margin-bottom: 28px; }
+.eyebrow { font-size: 12px; letter-spacing: .14em; font-weight: 850; color: #64748b; }
+h1 { margin: 6px 0; font-size: 38px; letter-spacing: -.03em; }
+header p, .panel p { color: #64748b; line-height: 1.6; }
+.panel { background: white; border: 1px solid #dde5ef; border-radius: 18px; padding: 22px; margin: 14px 0; box-shadow: 0 6px 22px rgba(15,23,42,.04); }
+h2 { margin: 0; }
+form { display: flex; gap: 8px; margin: 16px 0; }
+input { flex: 1; border: 1px solid #cbd5e1; border-radius: 10px; padding: 11px 12px; font: inherit; }
+button { border: 0; border-radius: 10px; padding: 10px 14px; background: #172033; color: white; font: inherit; font-weight: 800; cursor: pointer; }
+.secondary { background: #e8edf5; color: #172033; }
+.item { display: flex; justify-content: space-between; align-items: center; gap: 14px; border-top: 1px solid #edf2f7; padding: 11px 0; }
+.item code { overflow-wrap: anywhere; }
+.item button { background: transparent; color: #b42318; padding: 6px; }
+.empty { color: #94a3b8; font-size: 13px; }
+#message { min-height: 20px; color: #166534; font-weight: 650; }
