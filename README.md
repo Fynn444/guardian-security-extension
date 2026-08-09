@@ -56,7 +56,23 @@ The current version performs URL heuristic analysis locally.
 
 ## 📸 Screenshots
 
-Screenshots of the extension popup, suspicious-site warning page, and search-result protection will be added here.
+### 🛡️ Extension Popup
+
+Guardian's popup provides quick access to protection controls, local statistics, and settings.
+
+![Guardian Security extension popup](docs/screenshots/popup.png)
+
+### ⚠️ Suspicious Website Warning
+
+When a destination crosses Guardian's risk threshold, navigation is interrupted and the user is shown the detected risk, blocked destination, and reason for the warning.
+
+![Guardian Security suspicious website warning](docs/screenshots/blocked-warning.png)
+
+### 🔎 Google Search Protection
+
+Guardian v1.0.1 correctly allows security-related Google searches without mistaking the search query itself for a malicious destination.
+
+![Guardian Security Google search test](docs/screenshots/google-search-v1.0.1.png)
 
 ---
 
