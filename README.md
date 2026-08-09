@@ -1,6 +1,17 @@
-# 🛡️ Guardian Security
+<p align="center">
+  <img src="guardian-banner.svg" alt="Guardian Security banner" width="100%">
+</p>
 
-**A local-first Chrome security extension that proactively detects suspicious websites and warns users about potentially dangerous links.**
+<p align="center">
+  <strong>A local-first Chrome security extension that proactively detects suspicious websites and warns users about potentially dangerous links.</strong>
+</p>
+
+<p align="center">
+  <img alt="Chrome Manifest V3" src="https://img.shields.io/badge/Chrome-Manifest%20V3-1b63ff?style=flat-square">
+  <img alt="Version" src="https://img.shields.io/badge/version-v1.0.1-2f81f7?style=flat-square">
+  <img alt="License" src="https://img.shields.io/badge/license-MIT-0d8f68?style=flat-square">
+  <img alt="Status" src="https://img.shields.io/badge/status-early%20stage-8b5cf6?style=flat-square">
+</p>
 
 Guardian Security is built with **Chrome Manifest V3** and provides protection at two important points: when navigating to a website and while browsing Google search results.
 
