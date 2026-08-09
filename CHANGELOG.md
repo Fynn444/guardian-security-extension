@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is inspired by Keep a Changelog.
 
+## [1.0.1] - 2026-08-09
+
+### Fixed
+
+- Prevented security-related words inside search-engine query parameters from causing the search page itself to be blocked.
+- Keyword heuristics now evaluate hostname/path/fragment instead of arbitrary query-string text.
+- Embedded-credential detection now checks actual URL credentials instead of harmless `@` characters inside query parameters.
+- Long or heavily encoded search-engine URLs no longer receive generic risk points solely because of normal search parameters.
+
+### Added
+
+- Regression tests for searches containing phishing/malware terminology.
+
 ## [1.0.0] - 2026-08-09
 
 ### Added
