@@ -1,0 +1,244 @@
+name: Build Guardian Security Release
+
+on:
+  release:
+    types:
+      - published
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    name: Build extension package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Read extension version
+        id: version
+        shell: bash
+        run: |
+          VERSION=$(node -p "require('./manifest.json').version")
+
+          if [ -z "$VERSION" ]; then
+            echo "Could not read version from manifest.json"
+            exit 1
+          fi
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Guardian Security version: $VERSION"
+
+      - name: Validate manifest
+        shell: bash
+        run: |
+          node -e "
+          const manifest = require('./manifest.json');
+
+          if (manifest.manifest_version !== 3) {
+            throw new Error('Guardian Security must use Manifest V3');
+          }
+
+          if (!manifest.name) {
+            throw new Error('manifest.json is missing name');
+          }
+
+          if (!manifest.version) {
+            throw new Error('manifest.json is missing version');
+          }
+
+          console.log(
+            'Manifest OK:',
+            manifest.name,
+            manifest.version
+          );
+          "
+
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          set -e
+
+          while IFS= read -r file; do
+            echo "Checking $file"
+            node --check "$file"
+          done < <(
+            find . \
+              -type f \
+              -name "*.js" \
+              -not -path "./.git/*"
+          )
+
+      - name: Build clean extension directory
+        shell: bash
+        run: |
+          set -e
+
+          BUILD_DIR="dist/Guardian-Security"
+
+          rm -rf dist
+          mkdir -p "$BUILD_DIR"
+          mkdir -p "$BUILD_DIR/lib"
+          mkdir -p "$BUILD_DIR/icons"
+
+          echo "Copying core extension files..."
+
+          for file in \
+            manifest.json \
+            background.js \
+            content.js \
+            content.css \
+            blocked.html \
+            blocked.css \
+            blocked.js \
+            popup.html \
+            popup.css \
+            popup.js \
+            options.html \
+            options.css \
+            options.js
+          do
+            if [ ! -f "$file" ]; then
+              echo "Required file missing: $file"
+              exit 1
+            fi
+
+            cp "$file" "$BUILD_DIR/$file"
+          done
+
+          echo "Locating analyzer.js..."
+
+          if [ -f "lib/analyzer.js" ]; then
+            cp "lib/analyzer.js" "$BUILD_DIR/lib/analyzer.js"
+          elif [ -f "analyzer.js" ]; then
+            cp "analyzer.js" "$BUILD_DIR/lib/analyzer.js"
+          else
+            echo "Could not find analyzer.js"
+            exit 1
+          fi
+
+          echo "Locating defaults.js..."
+
+          if [ -f "lib/defaults.js" ]; then
+            cp "lib/defaults.js" "$BUILD_DIR/lib/defaults.js"
+          elif [ -f "defaults.js" ]; then
+            cp "defaults.js" "$BUILD_DIR/lib/defaults.js"
+          else
+            echo "Could not find defaults.js"
+            exit 1
+          fi
+
+          echo "Locating extension icons..."
+
+          for size in 16 32 48 128
+          do
+            if [ -f "icons/icon${size}.png" ]; then
+              cp "icons/icon${size}.png" \
+                "$BUILD_DIR/icons/icon${size}.png"
+
+            elif [ -f "icon${size}.png" ]; then
+              cp "icon${size}.png" \
+                "$BUILD_DIR/icons/icon${size}.png"
+
+            else
+              echo "Required icon missing: icon${size}.png"
+              exit 1
+            fi
+          done
+
+          echo "Extension directory built successfully."
+
+          echo
+          echo "Package contents:"
+          find "$BUILD_DIR" -type f | sort
+
+      - name: Verify packaged manifest references
+        shell: bash
+        run: |
+          set -e
+
+          cd dist/Guardian-Security
+
+          node -e "
+          const fs = require('fs');
+          const manifest = require('./manifest.json');
+
+          const required = [
+            manifest.background?.service_worker,
+            manifest.action?.default_popup,
+            manifest.options_page
+          ].filter(Boolean);
+
+          for (const script of manifest.content_scripts || []) {
+            required.push(...(script.js || []));
+            required.push(...(script.css || []));
+          }
+
+          for (const path of required) {
+            if (!fs.existsSync(path)) {
+              throw new Error(
+                'Packaged manifest references missing file: ' + path
+              );
+            }
+          }
+
+          console.log('Packaged manifest references are valid.');
+          "
+
+      - name: Create ZIP
+        shell: bash
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          ZIP_NAME="Guardian-Security-v${VERSION}.zip"
+
+          cd dist/Guardian-Security
+          zip -r "../$ZIP_NAME" .
+          cd ../..
+
+          echo "Created dist/$ZIP_NAME"
+          ls -lh "dist/$ZIP_NAME"
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Guardian-Security-v${{ steps.version.outputs.version }}
+          path: dist/Guardian-Security-v${{ steps.version.outputs.version }}.zip
+          if-no-files-found: error
+
+      - name: Verify release tag matches manifest
+        if: github.event_name == 'release'
+        shell: bash
+        run: |
+          EXPECTED="v${{ steps.version.outputs.version }}"
+          ACTUAL="${{ github.event.release.tag_name }}"
+
+          echo "Manifest version tag: $EXPECTED"
+          echo "Release tag:          $ACTUAL"
+
+          if [ "$EXPECTED" != "$ACTUAL" ]; then
+            echo "Release tag does not match manifest.json version."
+            exit 1
+          fi
+
+      - name: Attach ZIP to GitHub release
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          ZIP="dist/Guardian-Security-v${VERSION}.zip"
+          TAG="${{ github.event.release.tag_name }}"
+
+          gh release upload "$TAG" "$ZIP" --clobber
+
+          echo "Attached $ZIP to release $TAG"
